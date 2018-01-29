@@ -1,0 +1,4 @@
+type HistoryRecord {
+  dateTime: String
+  item: HistoryItem
+}

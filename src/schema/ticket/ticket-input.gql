@@ -1,0 +1,5 @@
+input TicketInput {
+  boardId: ID!
+  label: String!
+  body: String
+}

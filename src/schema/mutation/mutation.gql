@@ -1,0 +1,15 @@
+type Mutation {
+  createBoard(label: String!): Board
+  updateBoard(id: ID!, label: String!): Board
+  removeBoard(id: ID!): Board
+
+  createTicket(ticket: TicketInput!): Ticket
+  moveTicket(id: ID!, boardId: ID!): Ticket
+  updateTicketBody(id: ID! body: String!): Ticket
+  updateTicketLabel(id: ID!, label: String!): Ticket
+  removeTicket(id: ID!): Ticket
+
+  commentTicket(ticketId: ID!, body: String!): Comment
+  updateComment(id: ID!, body: String!): Comment
+  removeComment(id: ID!): Comment
+}

@@ -1,0 +1,1 @@
+union HistoryItem = Board | Comment

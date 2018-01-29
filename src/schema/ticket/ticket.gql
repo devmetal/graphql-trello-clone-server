@@ -1,0 +1,9 @@
+type Ticket {
+  id: ID!
+  label: String!
+  body: String
+  board: Board
+  created: String
+  comments: [Comment]
+  history: [HistoryRecord]
+}
