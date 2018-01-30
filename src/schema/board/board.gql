@@ -1,0 +1,5 @@
+type Board {
+  id: ID!
+  label: String!
+  tickets: [Ticket]
+}
