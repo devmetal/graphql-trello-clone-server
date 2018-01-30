@@ -9,7 +9,9 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "graphql": "^0.12.3",
-    "graphql-tools": "^2.18.0"
+    "graphql-tools": "^2.18.0",
+    "moment": "^2.20.1",
+    "mongoose": "5"
   },
   "devDependencies": {
     "@playlyfe/gql": "^2.4.0",
