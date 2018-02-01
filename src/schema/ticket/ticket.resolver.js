@@ -8,7 +8,7 @@ module.exports = {
     return moment(created).format();
   },
   comments(parent) {
-    return parent.getComment();
+    return parent.getComments();
   },
   history(parent) {
     return parent.getHistory();

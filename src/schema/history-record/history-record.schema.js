@@ -23,4 +23,4 @@ historyRecordSchema.methods.getItem = function getItem() {
   }
 };
 
-mongoose.model('HistoryRecord');
+mongoose.model('HistoryRecord', historyRecordSchema);
