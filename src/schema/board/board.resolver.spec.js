@@ -1,6 +1,6 @@
-require('../../helper/mongoose');
 require('./board.schema');
 require('../ticket/ticket.schema');
+const mhelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
 const resolver = require('./board.resolver');
 
@@ -33,6 +33,16 @@ const fillDb = async () => {
 };
 
 let board;
+
+beforeAll(async (done) => {
+  await mhelper.connect();
+  done();
+});
+
+afterAll(async (done) => {
+  await mhelper.disconnect();
+  done();
+});
 
 beforeEach(async (done) => {
   await clearDb();

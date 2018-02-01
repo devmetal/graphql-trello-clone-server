@@ -1,7 +1,7 @@
-require('../../helper/mongoose');
 require('./history-record.schema');
 require('../board/board.schema');
 require('../comment/comment.schema');
+const mhelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
 const resolver = require('./history-record.resolver');
 
@@ -38,6 +38,16 @@ const fillDb = async () => {
 };
 
 let histories;
+
+beforeAll(async (done) => {
+  await mhelper.connect();
+  done();
+});
+
+afterAll(async (done) => {
+  await mhelper.disconnect();
+  done();
+});
 
 beforeEach(async (done) => {
   await clearDb();

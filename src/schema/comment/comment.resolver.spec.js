@@ -1,6 +1,6 @@
-require('../../helper/mongoose');
 require('./comment.schema');
 require('../ticket/ticket.schema');
+const mhelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
 const resolver = require('./comment.resolver');
 
@@ -28,6 +28,16 @@ const fillDb = async () => {
 };
 
 let comment;
+
+beforeAll(async (done) => {
+  await mhelper.connect();
+  done();
+});
+
+afterAll(async (done) => {
+  await mhelper.disconnect();
+  done();
+});
 
 beforeEach(async (done) => {
   await clearDb();
