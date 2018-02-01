@@ -4,11 +4,12 @@ const { readFileSync } = require('fs');
 const Board = require('./board/board.resolver');
 const Comment = require('./comment/comment.resolver');
 const HistoryRecord = require('./history-record/history-record.resolver');
+const HistoryItem = require('./history-record/history-item.resolver');
 const Mutation = require('./mutation/mutation.resolver');
 const Query = require('./query/query.resolver');
 const Ticket = require('./ticket/ticket.resolver');
 
-const gqlFile = join.bind(null, __dirname);
+const gqlFile = file => join(__dirname, file);
 const readFile = file => readFileSync(file, { encoding: 'utf8' });
 
 /**
@@ -38,6 +39,7 @@ const resolvers = {
   Board,
   Comment,
   HistoryRecord,
+  HistoryItem,
 };
 
 module.exports = {
