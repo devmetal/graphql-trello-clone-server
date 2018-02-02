@@ -29,7 +29,7 @@ module.exports = {
   },
 
   async createTicket(_, args) {
-    const { boardId: board, ...rest } = args;
+    const { ticket: { boardId: board, ...rest } } = args;
 
     const now = moment().toDate();
 

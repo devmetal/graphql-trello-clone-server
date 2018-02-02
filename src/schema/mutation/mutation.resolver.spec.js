@@ -73,9 +73,11 @@ describe('mutations', () => {
       });
 
       ticket = await resolver.createTicket(null, {
-        boardId: board._id,
-        label: 'Test Ticket',
-        body: 'Test Ticket body',
+        ticket: {
+          boardId: board._id,
+          label: 'Test Ticket',
+          body: 'Test Ticket body',
+        },
       });
     });
 
@@ -163,8 +165,10 @@ describe('mutations', () => {
 
     beforeEach(async () => {
       ticket = await resolver.createTicket(null, {
-        boardId: new mongoose.Types.ObjectId(),
-        label: 'Test Ticket',
+        ticket: {
+          boardId: new mongoose.Types.ObjectId(),
+          label: 'Test Ticket',
+        },
       });
 
       comment = await resolver.commentTicket(null, {
