@@ -29,6 +29,13 @@
     "nodemon": "^1.14.11"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js}",
+      "!**/node_modules/**"
+    ],
+    "coverageDirectory": "coverage",
+    "forceExit": true
   }
 }
