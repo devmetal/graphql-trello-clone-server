@@ -10,6 +10,7 @@ const { mongo, env } = config.get();
 const dev = env !== 'production';
 
 mongoose.connect(mongo);
+mongoose.set('debug', true);
 
 const app = express();
 
