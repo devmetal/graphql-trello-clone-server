@@ -73,18 +73,10 @@ module.exports = {
     );
   },
 
-  updateTicketBody(_, { id, body }) {
+  updateTicket(_, { id, ticket }) {
     return Ticket.findOneAndUpdate(
       { _id: id },
-      { $set: { body } },
-      { new: true },
-    );
-  },
-
-  updateTicketLabel(_, { id, label }) {
-    return Ticket.findOneAndUpdate(
-      { _id: id },
-      { $set: { label } },
+      { $set: ticket },
       { new: true },
     );
   },
