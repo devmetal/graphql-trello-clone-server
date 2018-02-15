@@ -18,6 +18,7 @@ const readFile = file => readFileSync(file, { encoding: 'utf8' });
  */
 const files = [
   'schema.gql',
+  'user/user.gql',
   'board/board.gql',
   'comment/comment.gql',
   'history-record/history-item.gql',

@@ -1,30 +1,30 @@
+const { withFilter } = require('graphql-subscriptions');
 const pubSub = require('./pubsub');
 const topics = require('./topics');
 
+const withUserIdFilter = iterator => withFilter(
+  iterator,
+  (payload, args, { user }) => payload.user.id !== user.id,
+);
+
 module.exports = {
   ticketAdded: {
-    subscribe: () =>
-      pubSub.asyncIterator(topics.TICKET_ADDED),
+    subscribe: withUserIdFilter(() => pubSub.asyncIterator(topics.TICKET_ADDED)),
   },
   ticketUpdated: {
-    subscribe: () =>
-      pubSub.asyncIterator(topics.TICKET_UPDATED),
+    subscribe: withUserIdFilter(() => pubSub.asyncIterator(topics.TICKET_UPDATED)),
   },
   ticketRemoved: {
-    subscribe: () =>
-      pubSub.asyncIterator(topics.TICKET_REMOVED),
+    subscribe: withUserIdFilter(() => pubSub.asyncIterator(topics.TICKET_REMOVED)),
   },
 
   boardAdded: {
-    subscribe: () =>
-      pubSub.asyncIterator(topics.BOARD_ADDED),
+    subscribe: withUserIdFilter(() => pubSub.asyncIterator(topics.BOARD_ADDED)),
   },
   boardUpdated: {
-    subscribe: () =>
-      pubSub.asyncIterator(topics.BOARD_UPDATED),
+    subscribe: withUserIdFilter(() => pubSub.asyncIterator(topics.BOARD_UPDATED)),
   },
   boardRemoved: {
-    subscribe: () =>
-      pubSub.asyncIterator(topics.BOARD_REMOVED),
+    subscribe: withUserIdFilter(() => pubSub.asyncIterator(topics.BOARD_REMOVED)),
   },
 };
