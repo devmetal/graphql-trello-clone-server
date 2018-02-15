@@ -1,4 +1,5 @@
 type Query {
   boards: [Board]
   ticket(id: ID!): Ticket
+  currentUser: User
 }

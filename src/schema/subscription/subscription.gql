@@ -1,0 +1,9 @@
+type Subscription {
+  ticketAdded: Ticket
+  ticketRemoved: Ticket
+  ticketUpdated: Ticket
+
+  boardAdded: Board,
+  boardRemoved: Board,
+  boardUpdated: Board,
+}

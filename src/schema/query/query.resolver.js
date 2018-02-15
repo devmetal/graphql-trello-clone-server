@@ -12,4 +12,8 @@ module.exports = {
   ticket(parent, { id }) {
     return Ticket.findById(id);
   },
+  currentUser(parent, args, ctx) {
+    if (!ctx.user) return null;
+    return ctx.user;
+  },
 };

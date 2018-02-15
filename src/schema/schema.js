@@ -8,6 +8,7 @@ const HistoryItem = require('./history-record/history-item.resolver');
 const Mutation = require('./mutation/mutation.resolver');
 const Query = require('./query/query.resolver');
 const Ticket = require('./ticket/ticket.resolver');
+const Subscription = require('./subscription/subscription.resolver');
 
 const gqlFile = file => join(__dirname, file);
 const readFile = file => readFileSync(file, { encoding: 'utf8' });
@@ -17,6 +18,7 @@ const readFile = file => readFileSync(file, { encoding: 'utf8' });
  */
 const files = [
   'schema.gql',
+  'user/user.gql',
   'board/board.gql',
   'comment/comment.gql',
   'history-record/history-item.gql',
@@ -25,6 +27,7 @@ const files = [
   'query/query.gql',
   'ticket/ticket-input.gql',
   'ticket/ticket.gql',
+  'subscription/subscription.gql',
 ];
 
 const typeDefs = files
@@ -40,6 +43,7 @@ const resolvers = {
   Comment,
   HistoryRecord,
   HistoryItem,
+  Subscription,
 };
 
 module.exports = {

@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 const moment = require('moment');
+const pubsub = require('../subscription/pubsub');
+const topics = require('../subscription/topics');
+const { createToken } = require('../../auth');
 
 const Board = mongoose.model('Board');
 const Ticket = mongoose.model('Ticket');
 const Comment = mongoose.model('Comment');
 const HistoryRecord = mongoose.model('HistoryRecord');
+const User = mongoose.model('User');
 
 module.exports = {
   createBoard(_, { label }) {
@@ -12,12 +16,19 @@ module.exports = {
     return board.save();
   },
 
-  updateBoard(_, { id, label }) {
-    return Board.findOneAndUpdate(
+  async updateBoard(_, { id, label }, { user }) {
+    const boardUpdated = await Board.findOneAndUpdate(
       { _id: id },
       { $set: { label } },
       { new: true },
     );
+
+    pubsub.publish(topics.BOARD_UPDATED, {
+      boardUpdated,
+      user,
+    });
+
+    return boardUpdated;
   },
 
   removeBoard(_, { id }) {
@@ -28,7 +39,7 @@ module.exports = {
     );
   },
 
-  async createTicket(_, args) {
+  async createTicket(_, args, { user }) {
     const { ticket: { boardId: board, ...rest } } = args;
 
     const now = moment().toDate();
@@ -48,10 +59,14 @@ module.exports = {
       board,
     });
 
-    return Ticket.create(ticketData);
+    const newTicket = await Ticket.create(ticketData);
+
+    pubsub.publish(topics.TICKET_ADDED, { ticketAdded: newTicket, user });
+
+    return newTicket;
   },
 
-  async moveTicket(_, { id, boardId: board }) {
+  async moveTicket(_, { id, boardId: board }, { user }) {
     const now = moment().toDate();
 
     const historyData = {
@@ -60,10 +75,17 @@ module.exports = {
       itemType: 'board',
     };
 
+    const ticket = await Ticket.findById(id);
+
+    pubsub.publish(topics.TICKET_REMOVED, {
+      ticketRemoved: ticket,
+      user,
+    });
+
     const historyRecord = await HistoryRecord
       .create(historyData);
 
-    return Ticket.findOneAndUpdate(
+    const movedTicket = await Ticket.findOneAndUpdate(
       { _id: id },
       {
         $set: { board },
@@ -71,22 +93,43 @@ module.exports = {
       },
       { new: true },
     );
+
+    pubsub.publish(topics.TICKET_ADDED, {
+      ticketAdded: movedTicket,
+      user,
+    });
+
+    return movedTicket;
   },
 
-  updateTicket(_, { id, ticket }) {
-    return Ticket.findOneAndUpdate(
+  async updateTicket(_, { id, ticket }, { user }) {
+    const ticketUpdated = await Ticket.findOneAndUpdate(
       { _id: id },
       { $set: ticket },
       { new: true },
     );
+
+    pubsub.publish(topics.TICKET_UPDATED, {
+      ticketUpdated,
+      user,
+    });
+
+    return ticketUpdated;
   },
 
-  removeTicket(_, { id }) {
-    return Ticket.findOneAndUpdate(
+  async removeTicket(_, { id }, { user }) {
+    const ticketRemoved = await Ticket.findOneAndUpdate(
       { _id: id },
       { $set: { removed: true } },
       { new: true },
     );
+
+    pubsub.publish(topics.TICKET_REMOVED, {
+      ticketRemoved,
+      user,
+    });
+
+    return ticketRemoved;
   },
 
   async commentTicket(_, { ticketId, body }) {
@@ -128,5 +171,14 @@ module.exports = {
       { $set: { removed: true } },
       { new: true },
     );
+  },
+
+  async createUser(parent, { email, password }) {
+    const hased = await User.hash(password);
+    return User.create({ email, password: hased });
+  },
+
+  login(parent, { email, password }) {
+    return createToken({ email, password });
   },
 };
