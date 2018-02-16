@@ -2,6 +2,7 @@ require('../board/board.schema');
 require('../ticket/ticket.schema');
 require('../comment/comment.schema');
 require('../history-record/history-record.schema');
+require('../user/user.schema');
 const mhelper = require('../../helper/mongoose');
 const resolver = require('./mutation.resolver');
 const mongoose = require('mongoose');
@@ -14,6 +15,8 @@ const HistoryRecord = mongoose.model('HistoryRecord');
 beforeAll(async () => mhelper.connect());
 afterAll(async () => mhelper.disconnect());
 
+const ctx = { user: null };
+
 describe('mutations', () => {
   describe('board mutations', () => {
     let board;
@@ -22,7 +25,7 @@ describe('mutations', () => {
       await Board.remove({});
       board = await resolver.createBoard(null, {
         label: 'Test Board',
-      });
+      }, ctx);
     });
 
     afterEach(async () => {
@@ -40,7 +43,7 @@ describe('mutations', () => {
       await resolver.updateBoard(null, {
         id: board._id,
         label: 'Updated Label',
-      });
+      }, ctx);
 
       expect(await Board.findById(board._id).lean())
         .toMatchObject({
@@ -49,7 +52,7 @@ describe('mutations', () => {
     });
 
     it('remove board', async () => {
-      await resolver.removeBoard(null, { id: board._id });
+      await resolver.removeBoard(null, { id: board._id }, ctx);
       expect(await Board.findById(board._id).lean())
         .toMatchObject({
           removed: true,
@@ -70,7 +73,7 @@ describe('mutations', () => {
 
       board = await resolver.createBoard(null, {
         label: 'Test Board',
-      });
+      }, ctx);
 
       ticket = await resolver.createTicket(null, {
         ticket: {
@@ -78,7 +81,7 @@ describe('mutations', () => {
           label: 'Test Ticket',
           body: 'Test Ticket body',
         },
-      });
+      }, ctx);
     });
 
     afterEach(async () => {
@@ -105,12 +108,12 @@ describe('mutations', () => {
     });
 
     it('move ticket', async () => {
-      const newBoard = await resolver.createBoard(null, { label: 'New Board' });
+      const newBoard = await resolver.createBoard(null, { label: 'New Board' }, ctx);
 
       await resolver.moveTicket(null, {
         id: ticket._id,
         boardId: newBoard._id,
-      });
+      }, ctx);
 
       const ticketInDb = await Ticket.findById(ticket._id).lean();
       const historyInDbFirst = await HistoryRecord.findById(ticketInDb.history[0]).lean();
@@ -133,7 +136,7 @@ describe('mutations', () => {
     });
 
     it('remove ticket', async () => {
-      await resolver.removeTicket(null, { id: ticket._id });
+      await resolver.removeTicket(null, { id: ticket._id }, ctx);
       expect(await Ticket.findById(ticket._id).lean())
         .toMatchObject({ removed: true });
     });
@@ -142,7 +145,7 @@ describe('mutations', () => {
       comment = await resolver.commentTicket(null, {
         ticketId: ticket._id,
         body: 'New Comment',
-      });
+      }, ctx);
 
       expect(await Comment.findById(comment._id).lean())
         .toMatchObject({
@@ -169,12 +172,12 @@ describe('mutations', () => {
           boardId: new mongoose.Types.ObjectId(),
           label: 'Test Ticket',
         },
-      });
+      }, ctx);
 
       comment = await resolver.commentTicket(null, {
         ticketId: ticket._id,
         body: 'Test Comment',
-      });
+      }, ctx);
     });
 
     afterEach(async () => {
@@ -194,7 +197,7 @@ describe('mutations', () => {
       await resolver.updateComment(null, {
         id: comment._id,
         body: 'Updated Comment',
-      });
+      }, ctx);
 
       expect(await Comment.findById(comment._id).lean())
         .toMatchObject({
@@ -204,7 +207,7 @@ describe('mutations', () => {
     });
 
     it('remove comment', async () => {
-      await resolver.removeComment(null, { id: comment._id });
+      await resolver.removeComment(null, { id: comment._id }, ctx);
 
       expect(await Comment.findById(comment._id).lean())
         .toMatchObject({
