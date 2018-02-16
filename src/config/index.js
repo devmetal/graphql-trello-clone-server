@@ -20,6 +20,12 @@ const config = convict({
     format: '*',
     env: 'MONGO',
   },
+  teamServer: {
+    doc: 'Team Server URL',
+    default: 'http://localhost:3004',
+    format: '*',
+    env: 'TEAM_SERVER_URL',
+  },
 });
 
 const env = config.get('env');

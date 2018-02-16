@@ -8,6 +8,9 @@ const HistoryItem = require('./history-record/history-item.resolver');
 const Mutation = require('./mutation/mutation.resolver');
 const Query = require('./query/query.resolver');
 const Ticket = require('./ticket/ticket.resolver');
+const User = require('./user/user.resolver');
+const Team = require('./team/team.resolver');
+const Okr = require('./okr/okr.resolver');
 const Subscription = require('./subscription/subscription.resolver');
 
 const gqlFile = file => join(__dirname, file);
@@ -27,6 +30,8 @@ const files = [
   'query/query.gql',
   'ticket/ticket-input.gql',
   'ticket/ticket.gql',
+  'team/team.gql',
+  'okr/okr.gql',
   'subscription/subscription.gql',
 ];
 
@@ -41,6 +46,9 @@ const resolvers = {
   Ticket,
   Board,
   Comment,
+  User,
+  Team,
+  Okr,
   HistoryRecord,
   HistoryItem,
   Subscription,
