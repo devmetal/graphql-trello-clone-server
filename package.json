@@ -1,7 +1,7 @@
 {
   "name": "plano-ql",
   "version": "0.0.1",
-  "description": "Planorama Graphql Talk Server",
+  "description": "Graphql Talk Server",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
