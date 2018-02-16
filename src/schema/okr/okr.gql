@@ -1,0 +1,5 @@
+type Okr {
+  id: ID!
+  name: String!
+  team: Team!
+}

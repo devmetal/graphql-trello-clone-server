@@ -6,6 +6,7 @@ const { Schema } = mongoose;
 const userSchema = Schema({
   email: String,
   password: String,
+  teamId: Number,
 });
 
 const compare = (inputPass, userPass) => new Promise((resolve, reject) => {
