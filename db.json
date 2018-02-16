@@ -1,0 +1,20 @@
+{
+  "teams": [{
+    "id": 1,
+    "name": "Backend Team",
+    "details": "Backend stuffs"
+  }, {
+    "id": 2,
+    "name": "Frontend Team",
+    "details": "Frontend stuffs"
+  }],
+  "okrs": [{
+    "id": 3,
+    "teamId": 1,
+    "name": "Blame frontend"
+  }, {
+    "id": 4,
+    "teamId": 2,
+    "name": "Blame backend"
+  }]
+}
