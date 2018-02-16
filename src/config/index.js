@@ -16,7 +16,7 @@ const config = convict({
   },
   mongo: {
     doc: 'MongoDB uri',
-    default: 'mongodb://localhost/trello',
+    default: 'mongodb://localhost/trello-clone',
     format: '*',
     env: 'MONGO',
   },
