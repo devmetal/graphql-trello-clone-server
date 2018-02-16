@@ -1,5 +1,6 @@
 require('../board/board.schema');
 require('../ticket/ticket.schema');
+require('../user/user.schema');
 const mhelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
 const resolver = require('./query.resolver');
