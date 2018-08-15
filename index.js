@@ -1,35 +1,29 @@
-const { createServer } = require('http');
-const { execute, subscribe } = require('graphql');
-const { SubscriptionServer } = require('subscriptions-transport-ws');
-const config = require('./src/config');
-const schema = require('./src/schema');
+const { ApolloServer } = require('apollo-server-express');
+
+const { typeDefs, resolvers } = require('./src/schema');
 const app = require('./src/server');
+const config = require('./src/config');
 const { findUserByToken } = require('./src/auth');
 
 const { port } = config.get();
 
-// Initialize our express app
-const server = createServer(app);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-server.listen(port, () => {
+server.applyMiddleware({ app });
+
+/*server.subscriptionServerOptions.onConnect = (params) => {
+  if (params.token) {
+    return findUserByToken(params.token)
+      .then(user => ({ user }));
+  }
+
+  throw new Error('Missing auth token');
+};*/
+
+app.listen(() => {
   // eslint-disable-next-line
-  console.log(`Server listen on ${port}`);
-
-  // Start subs server
-  SubscriptionServer.create({
-    execute,
-    subscribe,
-    schema,
-    onConnect: (params) => {
-      if (params.token) {
-        return findUserByToken(params.token)
-          .then(user => ({ user }));
-      }
-
-      throw new Error('Missing auth token');
-    },
-  }, {
-    server,
-    path: '/subscriptions',
-  });
+  console.log(`Apollo Server 2 is running on ${port}`);
 });

@@ -1,4 +1,7 @@
-const { makeExecutableSchema } = require('graphql-tools');
+const { gql } = require('apollo-server');
 const { typeDefs, resolvers } = require('./schema');
 
-module.exports = makeExecutableSchema({ typeDefs, resolvers });
+module.exports = {
+  typeDefs: gql`${typeDefs}`,
+  resolvers,
+};
