@@ -12,7 +12,7 @@ const config = convict({
     doc: 'Application port',
     format: '*',
     env: 'PORT',
-    default: 8080,
+    default: 5432,
   },
   mongo: {
     doc: 'MongoDB uri',

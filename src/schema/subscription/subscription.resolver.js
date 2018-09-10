@@ -4,7 +4,7 @@ const topics = require('./topics');
 
 const withUserIdFilter = iterator => withFilter(
   iterator,
-  (payload, args, { user }) => payload.user.id !== user.id,
+  (payload, args, { sUser }) => payload.user.id !== sUser.id,
 );
 
 module.exports = {
