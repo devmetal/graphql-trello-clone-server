@@ -1,19 +1,12 @@
-require('../board/board.schema');
-require('../ticket/ticket.schema');
-require('../comment/comment.schema');
-require('../history-record/history-record.schema');
-require('../user/user.schema');
-const mhelper = require('../../helper/mongoose');
-const resolver = require('./mutation.resolver');
 const mongoose = require('mongoose');
+const resolver = require('./mutation.resolver');
 
 const Board = mongoose.model('Board');
 const Ticket = mongoose.model('Ticket');
 const Comment = mongoose.model('Comment');
 const HistoryRecord = mongoose.model('HistoryRecord');
 
-beforeAll(async () => mhelper.connect());
-afterAll(async () => mhelper.disconnect());
+process.env.TEST_SUITE = 'mutation';
 
 const ctx = { user: null };
 

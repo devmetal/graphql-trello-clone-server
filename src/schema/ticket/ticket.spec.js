@@ -1,19 +1,17 @@
-const { graphql } = require('graphql');
-const schema = require('../index');
-const mHelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
+const { graphql } = require('graphql');
+const { makeExecutableSchema } = require('apollo-server');
+const { typeDefs, resolvers } = require('../schema');
 
-beforeAll(async () => mHelper.connect());
-afterAll(async () => {
-  await mHelper.clearAll();
-  await mHelper.disconnect();
-});
+process.env.TEST_SUITE = 'ticket-graphql';
+
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 describe('ticket graphql', () => {
   describe('mutations', () => {
     let ticket;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       const query = `
         mutation CreateTicket($ticket: TicketInput!){
           createTicket(ticket: $ticket) {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --env=node -i",
+    "test": "jest --env=node",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint src",
@@ -48,8 +48,6 @@
     ],
     "coverageDirectory": "coverage",
     "forceExit": true,
-    "setupFiles": [
-      "./setup.js"
-    ]
+    "setupTestFrameworkScriptFile": "./jestSetup.js"
   }
 }

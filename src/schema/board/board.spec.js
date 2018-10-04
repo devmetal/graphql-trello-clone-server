@@ -1,18 +1,16 @@
 const { graphql } = require('graphql');
-const schema = require('../index');
-const mHelper = require('../../helper/mongoose');
+const { makeExecutableSchema } = require('apollo-server');
+const { typeDefs, resolvers } = require('../schema');
 
-beforeAll(async () => mHelper.connect());
-afterAll(async () => {
-  await mHelper.clearAll();
-  await mHelper.disconnect();
-});
+process.env.TEST_SUITE = 'board-graphql';
+
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 describe('board graphql', () => {
   describe('mutations', () => {
     let board;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       const query = `
         mutation {
           createBoard(label: "Test Board") {

@@ -1,16 +1,10 @@
-require('./board.schema');
-require('../ticket/ticket.schema');
-const mhelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
 const resolver = require('./board.resolver');
 
 const Board = mongoose.model('Board');
 const Ticket = mongoose.model('Ticket');
 
-const clearDb = async () => {
-  await Board.remove({});
-  await Ticket.remove({});
-};
+process.env.TEST_SUITE = 'board-resolver';
 
 const fillDb = async () => {
   const board = await Board.create({
@@ -34,24 +28,8 @@ const fillDb = async () => {
 
 let board;
 
-beforeAll(async (done) => {
-  await mhelper.connect();
-  done();
-});
-
-afterAll(async (done) => {
-  await mhelper.disconnect();
-  done();
-});
-
 beforeEach(async (done) => {
-  await clearDb();
   board = await fillDb();
-  done();
-});
-
-afterEach(async (done) => {
-  await clearDb();
   done();
 });
 
