@@ -1,7 +1,14 @@
 const mongoose = require('mongoose');
+// eslint-disable-next-line
+const MongoMemorySrv = require('mongodb-memory-server').default;
+
+const mongoServer = new MongoMemorySrv();
 
 // Mongoose models
 require('./src/schema/mongo');
+
+// Set mogno use native promises
+mongoose.Promise = Promise;
 
 // Util functions
 const clearMongoDb = () => {
@@ -9,7 +16,7 @@ const clearMongoDb = () => {
 
   if (collections) {
     const tasks = Object.keys(collections)
-      .map(k => collections[k].remove());
+      .map(k => collections[k].deleteMany());
 
     return Promise.all(tasks);
   }
@@ -17,11 +24,17 @@ const clearMongoDb = () => {
   return Promise.resolve();
 };
 
-const connectMongoDb = () => {
-  const uri = `mongodb://localhost:27017/${process.env.TEST_SUITE}`;
-  return mongoose.connect(uri, {
+const connectMongoDb = async () => {
+  const connSrt = await mongoServer.getConnectionString(process.env.TEST_SUITE);
+
+  const mongooseOpts = {
+    autoReconnect: true,
+    reconnectTries: Number.MAX_VALUE,
+    reconnectInterval: 1000,
     useNewUrlParser: true,
-  });
+  };
+
+  return mongoose.connect(connSrt, mongooseOpts);
 };
 
 const disconnectMongoDb = () => mongoose.disconnect();
