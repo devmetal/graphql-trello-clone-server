@@ -11,48 +11,6 @@ process.env.TEST_SUITE = 'mutation';
 const ctx = { user: null };
 
 describe('mutations', () => {
-  describe('board mutations', () => {
-    let board;
-
-    beforeEach(async () => {
-      await Board.remove({});
-      board = await resolver.createBoard(null, {
-        label: 'Test Board',
-      }, ctx);
-    });
-
-    afterEach(async () => {
-      await Board.remove({});
-    });
-
-    it('board created by createBoard', async () => {
-      expect(await Board.findById(board._id).lean())
-        .toMatchObject({
-          label: 'Test Board',
-        });
-    });
-
-    it('update board', async () => {
-      await resolver.updateBoard(null, {
-        id: board._id,
-        label: 'Updated Label',
-      }, ctx);
-
-      expect(await Board.findById(board._id).lean())
-        .toMatchObject({
-          label: 'Updated Label',
-        });
-    });
-
-    it('remove board', async () => {
-      await resolver.removeBoard(null, { id: board._id }, ctx);
-      expect(await Board.findById(board._id).lean())
-        .toMatchObject({
-          removed: true,
-        });
-    });
-  });
-
   describe('ticket mutations', () => {
     let ticket;
     let board;
@@ -64,9 +22,9 @@ describe('mutations', () => {
       await Comment.remove({});
       await HistoryRecord.remove({});
 
-      board = await resolver.createBoard(null, {
+      board = await Board.create({
         label: 'Test Board',
-      }, ctx);
+      });
 
       ticket = await resolver.createTicket(null, {
         ticket: {
@@ -101,7 +59,7 @@ describe('mutations', () => {
     });
 
     it('move ticket', async () => {
-      const newBoard = await resolver.createBoard(null, { label: 'New Board' }, ctx);
+      const newBoard = await Board.create({ label: 'New Board' });
 
       await resolver.moveTicket(null, {
         id: ticket._id,

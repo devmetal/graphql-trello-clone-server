@@ -40,7 +40,7 @@ const typeDefs = files
   .map(readFile)
   .reduce((acc, curr) => `${acc}${curr}`, '');
 
-const resolvers = {
+const baseResolvers = {
   Query,
   Mutation,
   Ticket,
@@ -53,6 +53,38 @@ const resolvers = {
   HistoryItem,
   Subscription,
 };
+
+const resolvers = { };
+
+/**
+ * Extend Query and Mutation objects
+ * with module resolvers Query and Mutation
+ * sub objects
+ */
+
+Object.keys(baseResolvers).forEach((rKey) => {
+  const resolver = baseResolvers[rKey];
+
+  const { Query: SubQuery, Mutation: SubMutation, ...rest } = resolver;
+
+  if (SubQuery) {
+    // extend base Query in schema resolvers
+    resolvers.Query = {
+      ...resolvers.Query,
+      ...SubQuery,
+    };
+  }
+
+  if (SubMutation) {
+    // extend base Mutation in schema resolvers
+    resolvers.Mutation = {
+      ...resolvers.Mutation,
+      ...SubMutation,
+    };
+  }
+
+  resolvers[rKey] = { ...rest };
+});
 
 module.exports = {
   typeDefs,

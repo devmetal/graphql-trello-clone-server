@@ -29,13 +29,6 @@ beforeEach(async () => {
   ticketId = await fillDb();
 });
 
-it('query boards resolver', async () => {
-  const boards = await resolver.boards();
-  expect(boards).toHaveLength(2);
-  expect(boards[0].label).toEqual('Test board 1');
-  expect(boards[1].label).toEqual('Test board 2');
-});
-
 it('query ticket resolver', async () => {
   const ticket = await resolver.ticket(null, { id: ticketId });
   expect(ticket.label).toEqual('Test ticket 1');

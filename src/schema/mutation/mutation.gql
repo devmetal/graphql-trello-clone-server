@@ -1,8 +1,4 @@
 type Mutation {
-  createBoard(label: String!): Board
-  updateBoard(id: ID!, label: String!): Board
-  removeBoard(id: ID!): Board
-
   createTicket(ticket: TicketInput!): Ticket
   moveTicket(id: ID!, boardId: ID!): Ticket
   updateTicket(id: ID! ticket: TicketInput!): Ticket

@@ -4,41 +4,12 @@ const pubsub = require('../subscription/pubsub');
 const topics = require('../subscription/topics');
 const { createToken } = require('../../auth');
 
-const Board = mongoose.model('Board');
 const Ticket = mongoose.model('Ticket');
 const Comment = mongoose.model('Comment');
 const HistoryRecord = mongoose.model('HistoryRecord');
 const User = mongoose.model('User');
 
 module.exports = {
-  createBoard(_, { label }) {
-    const board = new Board({ label });
-    return board.save();
-  },
-
-  async updateBoard(_, { id, label }, { user }) {
-    const boardUpdated = await Board.findOneAndUpdate(
-      { _id: id },
-      { $set: { label } },
-      { new: true },
-    );
-
-    pubsub.publish(topics.BOARD_UPDATED, {
-      boardUpdated,
-      user,
-    });
-
-    return boardUpdated;
-  },
-
-  removeBoard(_, { id }) {
-    return Board.findOneAndUpdate(
-      { _id: id },
-      { $set: { removed: true } },
-      { new: true },
-    );
-  },
-
   async createTicket(_, args, { user }) {
     const { ticket: { boardId: board, ...rest } } = args;
 
