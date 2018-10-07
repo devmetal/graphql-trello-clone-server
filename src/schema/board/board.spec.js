@@ -1,18 +1,15 @@
-const { graphql } = require('graphql');
-const schema = require('../index');
-const mHelper = require('../../helper/mongoose');
+const mongoose = require('mongoose');
 
-beforeAll(async () => mHelper.connect());
-afterAll(async () => {
-  await mHelper.clearAll();
-  await mHelper.disconnect();
-});
+process.env.TEST_SUITE = 'board-graphql';
+
+const Board = mongoose.model('Board');
+const findBoard = id => Board.findById(id);
 
 describe('board graphql', () => {
   describe('mutations', () => {
     let board;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       const query = `
         mutation {
           createBoard(label: "Test Board") {
@@ -25,16 +22,15 @@ describe('board graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      board = data.createBoard;
+      ({ createBoard: board } = await __gqlQuery(query));
     });
 
-    it('createBoard', async () => {
+    test('createBoard', async () => {
       expect(board.label).toEqual('Test Board');
       expect(board.tickets).toEqual([]);
     });
 
-    it('updateBoard', async () => {
+    test('updateBoard', async () => {
       const query = `
         mutation {
           updateBoard(id: "${board.id}", label: "Updated") {
@@ -43,11 +39,11 @@ describe('board graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      expect(data.updateBoard.label).toEqual('Updated');
+      const { updateBoard } = await __gqlQuery(query);
+      expect(updateBoard.label).toEqual('Updated');
     });
 
-    it('removeBoard', async () => {
+    test('removeBoard', async () => {
       const query = `
         mutation {
           removeBoard(id: "${board.id}") {
@@ -56,8 +52,10 @@ describe('board graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      expect(data.removeBoard.id).toEqual(board.id);
+      await __gqlQuery(query);
+
+      const boardInDb = await findBoard(board.id);
+      expect(boardInDb.removed).toBeTruthy();
     });
   });
 });

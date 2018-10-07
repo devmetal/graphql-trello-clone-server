@@ -1,17 +1,10 @@
-require('../board/board.schema');
-require('../ticket/ticket.schema');
-require('../user/user.schema');
-const mhelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
 const resolver = require('./query.resolver');
 
 const Board = mongoose.model('Board');
 const Ticket = mongoose.model('Ticket');
 
-const clearDb = async () => {
-  await Board.remove({});
-  await Ticket.remove({});
-};
+process.env.TEST_SUITE = 'query';
 
 const fillDb = async () => {
   const boards = await Board.create([{
@@ -32,21 +25,8 @@ const fillDb = async () => {
 
 let ticketId;
 
-beforeAll(async () => {
-  await mhelper.connect();
-});
-
-afterAll(async () => {
-  await mhelper.disconnect();
-});
-
 beforeEach(async () => {
-  await clearDb();
   ticketId = await fillDb();
-});
-
-afterEach(async () => {
-  await clearDb();
 });
 
 it('query boards resolver', async () => {

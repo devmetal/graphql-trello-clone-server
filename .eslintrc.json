@@ -5,5 +5,8 @@
     },
     "rules": {
         "no-underscore-dangle":"off"
+    },
+    "globals": {
+        "__gqlQuery": true
     }
 }

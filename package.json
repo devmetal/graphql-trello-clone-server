@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "jest --env=node -i",
+    "test": "jest --env=node",
     "start": "node index.js",
     "dev": "nodemon index.js",
     "lint": "eslint src",
@@ -37,6 +37,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "jest": "^22.1.4",
+    "mongodb-memory-server": "^2.4.2",
     "nodemon": "^1.14.11"
   },
   "jest": {
@@ -48,8 +49,6 @@
     ],
     "coverageDirectory": "coverage",
     "forceExit": true,
-    "setupFiles": [
-      "./setup.js"
-    ]
+    "setupTestFrameworkScriptFile": "./jestSetup.js"
   }
 }

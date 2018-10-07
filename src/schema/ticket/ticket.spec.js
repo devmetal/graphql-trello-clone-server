@@ -1,19 +1,18 @@
-const { graphql } = require('graphql');
-const schema = require('../index');
-const mHelper = require('../../helper/mongoose');
 const mongoose = require('mongoose');
 
-beforeAll(async () => mHelper.connect());
-afterAll(async () => {
-  await mHelper.clearAll();
-  await mHelper.disconnect();
-});
+process.env.TEST_SUITE = 'ticket-graphql';
+
+const Board = mongoose.model('Board');
+const Ticket = mongoose.model('Ticket');
 
 describe('ticket graphql', () => {
   describe('mutations', () => {
     let ticket;
+    let board;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
+      board = await Board.create({ label: 'Test Board' });
+
       const query = `
         mutation CreateTicket($ticket: TicketInput!){
           createTicket(ticket: $ticket) {
@@ -24,39 +23,56 @@ describe('ticket graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {}, {
+      const qInput = {
         ticket: {
-          boardId: new mongoose.Types.ObjectId(),
+          boardId: board._id,
           label: 'Test Ticket',
           body: 'Test body',
         },
-      });
+      };
 
-      ticket = data.createTicket;
+      ({ createTicket: ticket } = await __gqlQuery(query, {}, {}, qInput));
     });
 
-    it('createTicket', () => {
+    test('createTicket', () => {
       expect(ticket.label).toEqual('Test Ticket');
     });
 
-    it('moveTicket', async () => {
-      const id = new mongoose.Types.ObjectId();
+    test('ticket avaiable through board', async () => {
+      const query = `{
+        boards {
+          tickets {
+            id
+            label
+          }
+        }
+      }`;
+
+      const { boards } = await __gqlQuery(query);
+      expect(boards[0].tickets[0].label).toEqual('Test Ticket');
+    });
+
+    test('moveTicket', async () => {
+      const target = await Board.create({ label: 'Test Board' });
+
       const query = `
         mutation {
           moveTicket(
             id: "${ticket.id}",
-            boardId: "${id.toString()}"
+            boardId: "${target._id}"
           ) {
             id
           }
         }
       `;
 
-      const { errors } = await graphql(schema, query, {}, {});
-      expect(errors).toBeUndefined();
+      await __gqlQuery(query);
+
+      const ticketInDb = await Ticket.findById(ticket.id);
+      expect(ticketInDb.board).toEqual(target._id);
     });
 
-    it('removeTicket', async () => {
+    test('removeTicket', async () => {
       const query = `
         mutation {
           removeTicket(id: "${ticket.id}") {
@@ -65,8 +81,10 @@ describe('ticket graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      expect(data.removeTicket.id).toEqual(ticket.id);
+      await __gqlQuery(query);
+
+      const ticketInDb = await Ticket.findById(ticket.id);
+      expect(ticketInDb.removed).toBeTruthy();
     });
   });
 });
