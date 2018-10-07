@@ -1,10 +1,9 @@
-const { graphql } = require('graphql');
-const { makeExecutableSchema } = require('apollo-server');
-const { typeDefs, resolvers } = require('../schema');
+const mongoose = require('mongoose');
 
 process.env.TEST_SUITE = 'board-graphql';
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const Board = mongoose.model('Board');
+const findBoard = id => Board.findById(id);
 
 describe('board graphql', () => {
   describe('mutations', () => {
@@ -23,16 +22,15 @@ describe('board graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      board = data.createBoard;
+      ({ createBoard: board } = await __gqlQuery(query));
     });
 
-    it('createBoard', async () => {
+    test('createBoard', async () => {
       expect(board.label).toEqual('Test Board');
       expect(board.tickets).toEqual([]);
     });
 
-    it('updateBoard', async () => {
+    test('updateBoard', async () => {
       const query = `
         mutation {
           updateBoard(id: "${board.id}", label: "Updated") {
@@ -41,11 +39,11 @@ describe('board graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      expect(data.updateBoard.label).toEqual('Updated');
+      const { updateBoard } = await __gqlQuery(query);
+      expect(updateBoard.label).toEqual('Updated');
     });
 
-    it('removeBoard', async () => {
+    test('removeBoard', async () => {
       const query = `
         mutation {
           removeBoard(id: "${board.id}") {
@@ -54,8 +52,10 @@ describe('board graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      expect(data.removeBoard.id).toEqual(board.id);
+      await __gqlQuery(query);
+
+      const boardInDb = await findBoard(board.id);
+      expect(boardInDb.removed).toBeTruthy();
     });
   });
 });

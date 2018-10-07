@@ -35,7 +35,7 @@ beforeEach(async (done) => {
   done();
 });
 
-it('board get tickets resolver', async () => {
+test('board get tickets resolver', async () => {
   const tickets = await resolver.tickets(board);
   expect(tickets).toHaveLength(2);
   expect(tickets[0].label).toEqual('Test Ticket 1');

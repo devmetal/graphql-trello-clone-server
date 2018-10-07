@@ -42,18 +42,18 @@ beforeEach(async (done) => {
   done();
 });
 
-it('ticket board resolver', async () => {
+test('ticket board resolver', async () => {
   const board = await resolver.board(ticket);
   expect(board.label).toEqual('Test Board');
 });
 
-it('ticket comments resolver', async () => {
+test('ticket comments resolver', async () => {
   const comments = await resolver.comments(ticket);
   expect(comments).toHaveLength(1);
   expect(comments[0].body).toEqual('Test Comment');
 });
 
-it('ticket history resolver', async () => {
+test('ticket history resolver', async () => {
   const history = await resolver.history(ticket);
   expect(history).toHaveLength(1);
   expect(history[0].itemType).toEqual('comment');

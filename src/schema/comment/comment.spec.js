@@ -1,27 +1,24 @@
-const { graphql } = require('graphql');
 const mongoose = require('mongoose');
-const { makeExecutableSchema } = require('apollo-server');
-const { typeDefs, resolvers } = require('../schema');
-
-const Ticket = mongoose.model('Ticket');
 
 process.env.TEST_SUITE = 'comment-graphql';
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const Ticket = mongoose.model('Ticket');
+const Comment = mongoose.model('Comment');
 
-const fillDb = async () =>
+const findComment = id => Comment.findById(id);
+
+const createATicket = () =>
   Ticket.create({
     label: 'Test Ticket',
     body: 'Test Ticket',
     created: new Date(),
   });
 
-
 describe('comment graphql', () => {
   let ticket;
 
   beforeEach(async () => {
-    ticket = await fillDb();
+    ticket = await createATicket();
   });
 
   describe('mutations', () => {
@@ -43,19 +40,18 @@ describe('comment graphql', () => {
         }
       `;
 
-      const { data } = await graphql(schema, query, {}, {});
-      comment = data.commentTicket;
+      ({ commentTicket: comment } = await __gqlQuery(query));
     });
 
-    it('comment created', () => {
+    test('commentTicket', () => {
       expect(comment.body).toEqual('Test Comment');
     });
 
-    it('ticket is accessible through comment', () => {
+    test('ticket is accessible through comment', () => {
       expect(`${comment.ticket.id}`).toEqual(`${ticket._id}`);
     });
 
-    test('update comment', async () => {
+    test('updateComment', async () => {
       const query = `
         mutation {
           updateComment(
@@ -68,11 +64,11 @@ describe('comment graphql', () => {
         }
       `;
 
-      const { data: { updateComment } } = await graphql(schema, query, {}, {});
+      const { updateComment } = await __gqlQuery(query);
       expect(updateComment.body).toEqual('Test Comment Updated');
     });
 
-    test('remove comment', async () => {
+    test('removeComment', async () => {
       const query = `
         mutation {
           removeComment(id: "${comment.id}") {
@@ -81,8 +77,9 @@ describe('comment graphql', () => {
         }
       `;
 
-      const { data: { removeComment } } = await graphql(schema, query, {}, {});
-      expect(removeComment.id).toEqual(comment.id);
+      await __gqlQuery(query);
+      const commentInDb = await findComment(comment.id);
+      expect(commentInDb.removed).toBeTruthy();
     });
   });
 });

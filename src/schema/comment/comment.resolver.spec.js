@@ -28,7 +28,7 @@ beforeEach(async (done) => {
   done();
 });
 
-it('comment get ticket resolver', async () => {
+test('comment get ticket resolver', async () => {
   const ticket = await resolver.ticket(comment);
   expect(ticket.label).toEqual('Test Ticket');
 });
