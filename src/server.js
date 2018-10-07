@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const config = require('./config');
@@ -13,7 +12,6 @@ mongoose.set('debug', true);
 
 const app = express();
 
-// app.use(bodyParser.json());
 app.use(auth.initialize());
 app.use(morgan(dev ? 'dev' : 'combined'));
 
