@@ -1,9 +1,4 @@
 type Mutation {
-  createTicket(ticket: TicketInput!): Ticket
-  moveTicket(id: ID!, boardId: ID!): Ticket
-  updateTicket(id: ID! ticket: TicketInput!): Ticket
-  removeTicket(id: ID!): Ticket
-
   createUser(email: String!, password: String!): User
   login(email: String!, password: String): String
 }
