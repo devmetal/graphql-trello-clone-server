@@ -1534,9 +1534,9 @@ debug@^3.1.0:
     ms "^2.1.1"
 
 debug@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.0.1.tgz#f9bb36d439b8d1f0dd52d8fb6b46e4ebb8c1cd5b"
-  integrity sha512-K23FHJ/Mt404FSlp6gSZCevIbTMLX0j3fmHhUEhQ3Wq0FMODW3+cUSoLdy1Gx4polAf4t/lphhmHH35BB8cLYw==
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.0.tgz#373687bffa678b38b1cd91f861b63850035ddc87"
+  integrity sha512-heNPJUJIqC+xB6ayLAMHaIrmN9HKa7aQO8MGqKpvCA+uJYVcvR6l5kgdrhRuwPFHU7P5/A1w0BjByPHwpfTDKg==
   dependencies:
     ms "^2.1.1"
 
@@ -4398,9 +4398,9 @@ mongodb-core@3.1.5:
     saslprep "^1.0.0"
 
 mongodb-memory-server@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-2.4.2.tgz#72be3eb9084b9577216284284b8d820d75740b67"
-  integrity sha512-jwC7UDedS73x5+xgN6ekYOVDef8gAPEoNHjttFWxFvJ0j22W1BsVBahO7H7yV31Wt9dUg3Fey+o0WzK6NjDFTQ==
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/mongodb-memory-server/-/mongodb-memory-server-2.4.3.tgz#513cfcb009d153d42ba9a1d52a2d33fdb5383084"
+  integrity sha512-i2ad5ngxTYqiGcCdanGb67sdxi83kvrh4d/zAeIXLRpYNMCU38p+VOMz7Dr3AhDiIUBnkfP4eZNuRvOfq7GYTg==
   dependencies:
     "@babel/runtime" "^7.0.0"
     debug "^4.0.1"
@@ -4428,9 +4428,9 @@ mongoose-legacy-pluralize@1.0.2:
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
 mongoose@5:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.3.1.tgz#52d5bfb67788a2194e5f7a2a5c0d597e4b86fd7a"
-  integrity sha512-uiZC6KJbW/bACmOpIpfeHfyi70Ddfjpe1HRNafTHYZwOs3WbvzbP1VYRknsSQkW3xR+S7Z6Ze3EH7G/ao1Zqbw==
+  version "5.3.2"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.3.2.tgz#184887c359401ea42fedf7c48692d65eba91ce99"
+  integrity sha512-07fpCMqvCiSdKXIygt3aAeNFJYjQPjDXILbwBEmF0e8gy2hSKMNuP5QG4J6L8m9BhjVxcvoLiPzaGKN7I/7lLg==
   dependencies:
     async "2.6.1"
     bson "~1.0.5"
