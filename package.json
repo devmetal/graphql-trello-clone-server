@@ -10,6 +10,7 @@
     "dev": "nodemon index.js",
     "lint": "eslint src",
     "ci": "yarn lint && yarn test",
+    "husky": "husky-upgrade",
     "json-server": "json-server --watch db.json --port 3004"
   },
   "dependencies": {
@@ -35,9 +36,23 @@
     "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
+    "husky": "^1.1.1",
     "jest": "^22.1.4",
+    "lint-staged": "^7.3.0",
     "mongodb-memory-server": "^2.4.2",
-    "nodemon": "^1.14.11"
+    "nodemon": "^1.14.11",
+    "prettier": "^1.14.3",
+    "pretty-quick": "^1.7.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ]
   },
   "jest": {
     "testEnvironment": "node",
