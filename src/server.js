@@ -9,6 +9,8 @@ const dev = env !== 'production';
 
 mongoose.connect(mongo);
 mongoose.set('debug', true);
+mongoose.set('useFindAndModify', false);
+mongoose.Promise = Promise;
 
 const app = express();
 

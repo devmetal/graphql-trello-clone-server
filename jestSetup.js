@@ -16,6 +16,7 @@ require('./src/schema/mongo');
 
 // Set mogno use native promises
 mongoose.Promise = Promise;
+mongoose.set('useFindAndModify', false);
 
 // Global query helper
 global.__gqlQuery = async (query, root = {}, ctx = {}, ...rest) => {
