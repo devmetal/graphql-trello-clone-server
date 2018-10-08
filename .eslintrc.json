@@ -4,7 +4,8 @@
         "jest": true
     },
     "rules": {
-        "no-underscore-dangle":"off"
+        "no-underscore-dangle":"off",
+        "arrow-parens":"off"
     },
     "globals": {
         "__gqlQuery": true

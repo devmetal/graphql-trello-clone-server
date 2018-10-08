@@ -10,9 +10,7 @@ module.exports = {
   },
   Query: {
     boards() {
-      return Board
-        .find({ removed: false })
-        .sort({ _id: 1 });
+      return Board.find({ removed: false }).sort({ _id: 1 });
     },
   },
   Mutation: {

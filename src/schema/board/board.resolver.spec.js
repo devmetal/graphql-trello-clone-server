@@ -36,19 +36,19 @@ const fillDb = async () => {
 
 let board;
 
-beforeEach(async (done) => {
+beforeEach(async done => {
   board = await fillDb();
   done();
 });
 
-test('get boards resolver', async () => {
+test('get boards with resolver', async () => {
   const boards = await query.boards();
   expect(boards).toHaveLength(2);
   expect(boards[0].label).toEqual('Test Board 1');
   expect(boards[1].label).toEqual('Test Board 2');
 });
 
-test('board get tickets resolver', async () => {
+test('get tickets with resolver', async () => {
   const tickets = await resolver.tickets(board);
   expect(tickets).toHaveLength(2);
   expect(tickets[0].label).toEqual('Test Ticket 1');
@@ -57,28 +57,31 @@ test('board get tickets resolver', async () => {
 
 test('create board', async () => {
   const { _id } = await mutation.createBoard(null, { label: 'Test Board' });
-  expect(await Board.findById(_id).lean())
-    .toMatchObject({
-      label: 'Test Board',
-    });
+  expect(await Board.findById(_id).lean()).toMatchObject({
+    label: 'Test Board',
+  });
 });
 
 test('update board', async () => {
-  await mutation.updateBoard(null, {
-    id: board._id,
-    label: 'Updated Label',
-  }, { user: null });
-
-  expect(await Board.findById(board._id).lean())
-    .toMatchObject({
+  await mutation.updateBoard(
+    null,
+    {
+      id: board._id,
       label: 'Updated Label',
-    });
+    },
+    {
+      user: null,
+    },
+  );
+
+  expect(await Board.findById(board._id).lean()).toMatchObject({
+    label: 'Updated Label',
+  });
 });
 
 test('remove board', async () => {
   await mutation.removeBoard(null, { id: board._id }, { user: null });
-  expect(await Board.findById(board._id).lean())
-    .toMatchObject({
-      removed: true,
-    });
+  expect(await Board.findById(board._id).lean()).toMatchObject({
+    removed: true,
+  });
 });
