@@ -4,10 +4,6 @@ type Mutation {
   updateTicket(id: ID! ticket: TicketInput!): Ticket
   removeTicket(id: ID!): Ticket
 
-  commentTicket(ticketId: ID!, body: String!): Comment
-  updateComment(id: ID!, body: String!): Comment
-  removeComment(id: ID!): Comment
-
   createUser(email: String!, password: String!): User
   login(email: String!, password: String): String
 }

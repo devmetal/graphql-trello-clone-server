@@ -3,3 +3,9 @@ type Comment {
   ticket: Ticket!
   body: String!
 }
+
+extend type Mutation {
+  commentTicket(ticketId: ID!, body: String!): Comment
+  updateComment(id: ID!, body: String!): Comment
+  removeComment(id: ID!): Comment
+}

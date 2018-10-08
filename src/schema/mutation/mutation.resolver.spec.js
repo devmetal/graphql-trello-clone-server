@@ -14,7 +14,6 @@ describe('mutations', () => {
   describe('ticket mutations', () => {
     let ticket;
     let board;
-    let comment;
 
     beforeEach(async () => {
       await Board.remove({});
@@ -90,80 +89,6 @@ describe('mutations', () => {
       await resolver.removeTicket(null, { id: ticket._id }, ctx);
       expect(await Ticket.findById(ticket._id).lean())
         .toMatchObject({ removed: true });
-    });
-
-    it('comment ticket', async () => {
-      comment = await resolver.commentTicket(null, {
-        ticketId: ticket._id,
-        body: 'New Comment',
-      }, ctx);
-
-      expect(await Comment.findById(comment._id).lean())
-        .toMatchObject({
-          ticket: ticket._id,
-          body: 'New Comment',
-        });
-
-      const ticketInDb = await Ticket.findById(ticket._id);
-      expect(await HistoryRecord.findById(ticketInDb.history[1]).lean())
-        .toMatchObject({
-          itemType: 'comment',
-          item: comment._id,
-        });
-    });
-  });
-
-  describe('comment mutations', () => {
-    let comment;
-    let ticket;
-
-    beforeEach(async () => {
-      ticket = await resolver.createTicket(null, {
-        ticket: {
-          boardId: new mongoose.Types.ObjectId(),
-          label: 'Test Ticket',
-        },
-      }, ctx);
-
-      comment = await resolver.commentTicket(null, {
-        ticketId: ticket._id,
-        body: 'Test Comment',
-      }, ctx);
-    });
-
-    afterEach(async () => {
-      await Ticket.remove({});
-      await Comment.remove({});
-    });
-
-    it('comment created', async () => {
-      expect(await Comment.findById(comment._id).lean())
-        .toMatchObject({
-          ticket: ticket._id,
-          body: 'Test Comment',
-        });
-    });
-
-    it('update comment', async () => {
-      await resolver.updateComment(null, {
-        id: comment._id,
-        body: 'Updated Comment',
-      }, ctx);
-
-      expect(await Comment.findById(comment._id).lean())
-        .toMatchObject({
-          ticket: ticket._id,
-          body: 'Updated Comment',
-        });
-    });
-
-    it('remove comment', async () => {
-      await resolver.removeComment(null, { id: comment._id }, ctx);
-
-      expect(await Comment.findById(comment._id).lean())
-        .toMatchObject({
-          removed: true,
-        });
     });
   });
 });
