@@ -16,23 +16,25 @@ const fillDb = async () => {
     body: 'Test comment',
   });
 
-  const histories = await HistoryRecord.create([{
-    dateTime: new Date(),
-    item: board._id,
-    itemType: 'board',
-  }, {
-    dateTime: new Date(),
-    item: comment._id,
-    itemType: 'comment',
-  }]);
+  const histories = await HistoryRecord.create([
+    {
+      dateTime: new Date(),
+      item: board._id,
+      itemType: 'board',
+    },
+    {
+      dateTime: new Date(),
+      item: comment._id,
+      itemType: 'comment',
+    },
+  ]);
 
   return histories;
 };
 
 let histories;
 
-
-beforeEach(async (done) => {
+beforeEach(async done => {
   histories = await fillDb();
   done();
 });

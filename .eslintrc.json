@@ -5,7 +5,8 @@
     },
     "rules": {
         "no-underscore-dangle":"off",
-        "arrow-parens":"off"
+        "arrow-parens":"off",
+        "function-paren-newline":"off"
     },
     "globals": {
         "__gqlQuery": true

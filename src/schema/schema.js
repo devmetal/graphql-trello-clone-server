@@ -54,7 +54,7 @@ const baseResolvers = {
   Subscription,
 };
 
-const resolvers = { };
+const resolvers = {};
 
 /**
  * Extend Query and Mutation objects
@@ -62,7 +62,7 @@ const resolvers = { };
  * sub objects
  */
 
-Object.keys(baseResolvers).forEach((rKey) => {
+Object.keys(baseResolvers).forEach(rKey => {
   const resolver = baseResolvers[rKey];
 
   const { Query: SubQuery, Mutation: SubMutation, ...rest } = resolver;
