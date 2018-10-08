@@ -6,10 +6,7 @@ const jwt = require('jwt-simple');
 const secret = 'dmasédmasdfdsfsfds';
 const UserModel = mongoose.model('User');
 
-const {
-  ExtractJwt,
-  Strategy,
-} = passportJwt;
+const { ExtractJwt, Strategy } = passportJwt;
 
 const params = {
   secretOrKey: secret,
@@ -68,4 +65,3 @@ module.exports = {
     return jwt.encode(payload, secret);
   },
 };
-

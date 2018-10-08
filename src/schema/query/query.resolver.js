@@ -8,8 +8,6 @@ module.exports = {
     return ctx.user;
   },
   users() {
-    return User
-      .find({})
-      .sort({ _id: 1 });
+    return User.find({}).sort({ _id: 1 });
   },
 };

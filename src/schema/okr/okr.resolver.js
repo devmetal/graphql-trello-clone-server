@@ -5,7 +5,6 @@ const base = config.get('teamServer');
 
 module.exports = {
   team({ teamId }) {
-    return axios.get(`${base}/teams/${teamId}`)
-      .then(response => response.data);
+    return axios.get(`${base}/teams/${teamId}`).then(response => response.data);
   },
 };

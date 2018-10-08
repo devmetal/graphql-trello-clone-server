@@ -15,14 +15,18 @@ const ticketSchema = Schema({
     type: Boolean,
     default: false,
   },
-  comments: [{
-    type: Types.ObjectId,
-    ref: 'Comment',
-  }],
-  history: [{
-    type: Types.ObjectId,
-    ref: 'HistoryRecord',
-  }],
+  comments: [
+    {
+      type: Types.ObjectId,
+      ref: 'Comment',
+    },
+  ],
+  history: [
+    {
+      type: Types.ObjectId,
+      ref: 'HistoryRecord',
+    },
+  ],
 });
 
 ticketSchema.methods.getBoard = function getBoard() {
@@ -30,7 +34,8 @@ ticketSchema.methods.getBoard = function getBoard() {
 };
 
 ticketSchema.methods.getComments = function getComments() {
-  return mongoose.model('Comment')
+  return mongoose
+    .model('Comment')
     .find({
       _id: { $in: this.comments },
       removed: false,
@@ -39,7 +44,8 @@ ticketSchema.methods.getComments = function getComments() {
 };
 
 ticketSchema.methods.getHistory = function getHistory() {
-  return mongoose.model('HistoryRecord')
+  return mongoose
+    .model('HistoryRecord')
     .find({ _id: { $in: this.history } })
     .sort({ dateTime: -1 });
 };
