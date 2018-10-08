@@ -8,7 +8,8 @@ const boardSchema = Schema({
 });
 
 boardSchema.methods.getTickets = function getTickets() {
-  return mongoose.model('Ticket')
+  return mongoose
+    .model('Ticket')
     .find({
       board: this._id,
       removed: false,

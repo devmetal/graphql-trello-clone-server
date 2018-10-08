@@ -3,3 +3,13 @@ type Board {
   label: String!
   tickets: [Ticket]
 }
+
+extend type Query {
+  boards: [Board]
+}
+
+extend type Mutation {
+  createBoard(label: String!): Board
+  updateBoard(id: ID!, label: String!): Board
+  removeBoard(id: ID!): Board
+}

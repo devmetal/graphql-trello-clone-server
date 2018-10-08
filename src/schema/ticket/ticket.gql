@@ -7,3 +7,14 @@ type Ticket {
   comments: [Comment]
   history: [HistoryRecord]
 }
+
+extend type Query {
+  ticket(id: ID!): Ticket
+}
+
+extend type Mutation {
+  createTicket(ticket: TicketInput!): Ticket
+  moveTicket(id: ID!, boardId: ID!): Ticket
+  updateTicket(id: ID! ticket: TicketInput!): Ticket
+  removeTicket(id: ID!): Ticket
+}

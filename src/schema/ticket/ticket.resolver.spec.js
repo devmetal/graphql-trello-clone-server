@@ -6,6 +6,8 @@ const Comment = mongoose.model('Comment');
 const Board = mongoose.model('Board');
 const HisotryRecord = mongoose.model('HistoryRecord');
 
+const { Query: query, Mutation: mutation } = resolver;
+
 process.env.TEST_SUITE = 'ticket-resolver';
 
 const fillDb = async () => {
@@ -37,9 +39,16 @@ const fillDb = async () => {
 
 let ticket;
 
-beforeEach(async (done) => {
+beforeEach(async done => {
   ticket = await fillDb(done);
   done();
+});
+
+test('get ticket with resolver', async () => {
+  expect(await query.ticket(null, { id: ticket._id })).toMatchObject({
+    label: 'Test Ticket',
+    body: 'Test ticket body',
+  });
 });
 
 test('ticket board resolver', async () => {
@@ -57,4 +66,54 @@ test('ticket history resolver', async () => {
   const history = await resolver.history(ticket);
   expect(history).toHaveLength(1);
   expect(history[0].itemType).toEqual('comment');
+});
+
+test('create ticket', async () => {
+  const board = await Board.create({
+    label: 'Test Board',
+  });
+
+  const newTicket = await mutation.createTicket(
+    null,
+    {
+      ticket: {
+        boardId: board._id,
+        label: 'Test Ticket',
+        body: 'Test Ticket body',
+      },
+    },
+    {},
+  );
+
+  expect(newTicket).toMatchObject({
+    label: 'Test Ticket',
+    board: board._id,
+  });
+});
+
+it('move ticket', async () => {
+  const newBoard = await Board.create({ label: 'New Board' });
+
+  await mutation.moveTicket(
+    null,
+    {
+      id: ticket._id,
+      boardId: newBoard._id,
+    },
+    {},
+  );
+
+  const ticketInDb = await Ticket.findById(ticket._id).lean();
+
+  expect(ticketInDb).toMatchObject({
+    label: 'Test Ticket',
+    board: newBoard._id,
+  });
+});
+
+it('remove ticket', async () => {
+  await mutation.removeTicket(null, { id: ticket._id }, {});
+  expect(await Ticket.findById(ticket._id).lean()).toMatchObject({
+    removed: true,
+  });
 });
