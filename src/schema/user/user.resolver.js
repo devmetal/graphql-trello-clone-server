@@ -22,8 +22,20 @@ module.exports = {
   },
   Mutation: {
     async createUser(parent, { email, password }) {
-      const hased = await User.hash(password);
-      return User.create({ email, password: hased });
+      const count = await User.countDocuments({ email });
+
+      if (count) {
+        throw new Error('Email already exists');
+      }
+
+      try {
+        const hased = await User.hash(password);
+        await User.create({ email, password: hased });
+      } catch (e) {
+        throw new Error('User creation failed');
+      }
+
+      return createToken({ email, password });
     },
 
     login(parent, { email, password }) {
