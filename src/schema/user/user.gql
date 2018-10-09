@@ -4,3 +4,13 @@ type User {
   password: String!
   team: Team
 }
+
+extend type Query {
+  currentUser: User
+  users: [User]
+}
+
+extend type Mutation {
+  createUser(email: String!, password: String!): User
+  login(email: String!, password: String): String
+}
