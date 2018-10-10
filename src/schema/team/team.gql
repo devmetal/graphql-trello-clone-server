@@ -1,6 +1,0 @@
-type Team {
-  id: ID!,
-  name: String!
-  details: String!
-  okrs: [Okr]
-}
