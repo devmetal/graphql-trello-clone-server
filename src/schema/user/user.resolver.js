@@ -1,16 +1,9 @@
-const axios = require('axios');
 const mongoose = require('mongoose');
 const { createToken } = require('../../auth');
-const config = require('../../config');
-
-const base = config.get('teamServer');
 
 const User = mongoose.model('User');
 
 module.exports = {
-  team({ teamId }) {
-    return axios.get(`${base}/teams/${teamId}`).then(resp => resp.data);
-  },
   Query: {
     currentUser(parent, args, ctx) {
       if (!ctx.user) return null;
