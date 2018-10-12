@@ -6,9 +6,13 @@ const auth = require('./auth');
 
 const { mongo, env } = config.get();
 const dev = env !== 'production';
+const test = env === 'test';
 
-mongoose.connect(mongo);
-mongoose.set('debug', true);
+if (!test) {
+  mongoose.connect(mongo);
+  mongoose.set('debug', true);
+}
+
 mongoose.set('useFindAndModify', false);
 mongoose.Promise = Promise;
 
@@ -23,6 +27,10 @@ app.use('/graphql', (req, res, next) => {
     req.user = user;
     return next();
   })(req, res, next);
+});
+
+app.get('/health', (req, res) => {
+  res.json({ mem: process.memoryUsage() });
 });
 
 if (dev) {

@@ -37,7 +37,11 @@ server.applyMiddleware({ app });
 const httpServer = createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-httpServer.listen(port, () => {
-  // eslint-disable-next-line
-  console.log(`Apollo Server 2 is running on ${port}`);
-});
+if (require.main === module) {
+  httpServer.listen(port, () => {
+    // eslint-disable-next-line
+    console.log(`Apollo Server 2 is running on ${port}`);
+  });
+} else {
+  module.exports = httpServer;
+}
