@@ -7,7 +7,7 @@ process.env.TEST_SUITE = 'server-sanity';
 const Board = mongoose.model('Board');
 const Ticket = mongoose.model('Ticket');
 
-const testPort = 5432;
+const testPort = 3030;
 
 const gqlRequest = token => (query, variables = {}) =>
   new Promise((resolve, reject) => {
