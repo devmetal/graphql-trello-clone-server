@@ -1,0 +1,12 @@
+union Target = Board | Comment
+
+type HistoryRecord {
+  dateTime: String
+  target: Target
+  user: User
+  action: String
+}
+
+extend type Query {
+  history: [HistoryRecord]
+}
