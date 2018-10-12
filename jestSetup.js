@@ -6,6 +6,9 @@ const { graphql } = require('graphql');
 const { makeExecutableSchema } = require('apollo-server');
 const { typeDefs, resolvers } = require('./src/schema/schema');
 
+// setup environment
+process.env.NODE_ENV = 'test';
+
 const mongoServer = new MongoMemorySrv();
 
 // Create a schema for all tests
@@ -31,11 +34,14 @@ global.__gqlQuery = async (query, root = {}, ctx = {}, ...rest) => {
 
 // Util functions
 const clearMongoDb = () => {
-  const { connection: { collections } } = mongoose;
+  const {
+    connection: { collections },
+  } = mongoose;
 
   if (collections) {
-    const tasks = Object.keys(collections)
-      .map(k => collections[k].deleteMany());
+    const tasks = Object.keys(collections).map(k =>
+      collections[k].deleteMany(),
+    );
 
     return Promise.all(tasks);
   }
@@ -53,13 +59,16 @@ const connectMongoDb = async () => {
     useNewUrlParser: true,
   };
 
-  return mongoose.connect(connSrt, mongooseOpts);
+  return mongoose.connect(
+    connSrt,
+    mongooseOpts,
+  );
 };
 
 const disconnectMongoDb = () => mongoose.disconnect();
 const mongoDbDisconnected = () => mongoose.connection.readyState === 0;
 
-beforeEach(async (done) => {
+beforeEach(async done => {
   if (mongoDbDisconnected()) {
     await connectMongoDb();
   }

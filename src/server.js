@@ -1,20 +1,26 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const config = require('./config');
 const auth = require('./auth');
 
 const { mongo, env } = config.get();
 const dev = env !== 'production';
+const test = env === 'test';
 
-mongoose.connect(mongo);
-mongoose.set('debug', true);
+if (!test) {
+  mongoose.connect(mongo);
+  mongoose.set('debug', true);
+}
+
 mongoose.set('useFindAndModify', false);
 mongoose.Promise = Promise;
 
 const app = express();
 
 app.use(auth.initialize());
+app.use(bodyParser.json());
 app.use(morgan(dev ? 'dev' : 'combined'));
 
 app.use('/graphql', (req, res, next) => {
@@ -23,6 +29,10 @@ app.use('/graphql', (req, res, next) => {
     req.user = user;
     return next();
   })(req, res, next);
+});
+
+app.get('/health', (req, res) => {
+  res.json({ mem: process.memoryUsage() });
 });
 
 if (dev) {
