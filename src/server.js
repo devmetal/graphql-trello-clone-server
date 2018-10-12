@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const config = require('./config');
 const auth = require('./auth');
 
@@ -19,6 +20,7 @@ mongoose.Promise = Promise;
 const app = express();
 
 app.use(auth.initialize());
+app.use(bodyParser.json());
 app.use(morgan(dev ? 'dev' : 'combined'));
 
 app.use('/graphql', (req, res, next) => {
