@@ -1,8 +1,8 @@
-union Target = Board | Comment
+union HistoryTarget = Board | Comment
 
 type HistoryRecord {
   dateTime: String
-  target: Target
+  target: HistoryTarget
   user: User
   action: String
 }
