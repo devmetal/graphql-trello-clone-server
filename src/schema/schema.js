@@ -3,8 +3,6 @@ const { join } = require('path');
 const { readFileSync } = require('fs');
 const Board = require('./board/board.resolver');
 const Comment = require('./comment/comment.resolver');
-const HistoryRecord = require('./history-record/history-record.resolver');
-const HistoryItem = require('./history-record/history-item.resolver');
 const Mutation = require('./mutation/mutation.resolver');
 const Query = require('./query/query.resolver');
 const Ticket = require('./ticket/ticket.resolver');
@@ -22,8 +20,6 @@ const files = [
   'user/user.gql',
   'board/board.gql',
   'comment/comment.gql',
-  'history-record/history-item.gql',
-  'history-record/history-record.gql',
   'mutation/mutation.gql',
   'query/query.gql',
   'ticket/ticket-input.gql',
@@ -43,8 +39,6 @@ const baseResolvers = {
   Board,
   Comment,
   User,
-  HistoryRecord,
-  HistoryItem,
   Subscription,
 };
 
