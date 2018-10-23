@@ -21,12 +21,6 @@ const ticketSchema = Schema({
       ref: 'Comment',
     },
   ],
-  history: [
-    {
-      type: Types.ObjectId,
-      ref: 'HistoryRecord',
-    },
-  ],
 });
 
 ticketSchema.methods.getBoard = function getBoard() {
@@ -41,13 +35,6 @@ ticketSchema.methods.getComments = function getComments() {
       removed: false,
     })
     .sort({ _id: -1 });
-};
-
-ticketSchema.methods.getHistory = function getHistory() {
-  return mongoose
-    .model('HistoryRecord')
-    .find({ _id: { $in: this.history } })
-    .sort({ dateTime: -1 });
 };
 
 mongoose.model('Ticket', ticketSchema);

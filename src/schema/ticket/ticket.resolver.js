@@ -5,7 +5,6 @@ const pubsub = require('../subscription/pubsub');
 const topics = require('../subscription/topics');
 
 const Ticket = mongoose.model('Ticket');
-const HistoryRecord = mongoose.model('HistoryRecord');
 
 module.exports = {
   board(parent) {
@@ -16,9 +15,6 @@ module.exports = {
   },
   comments(parent) {
     return parent.getComments();
-  },
-  history(parent) {
-    return parent.getHistory();
   },
   Query: {
     ticket(_, { id }) {
@@ -33,16 +29,7 @@ module.exports = {
 
       const now = moment().toDate();
 
-      const historyData = {
-        dateTime: now,
-        item: board,
-        itemType: 'board',
-      };
-
-      const historyRecord = await HistoryRecord.create(historyData);
-
       const ticketData = Object.assign({}, rest, {
-        history: [historyRecord._id],
         created: now,
         board,
       });
@@ -55,14 +42,6 @@ module.exports = {
     },
 
     async moveTicket(_, { id, boardId: board }, { user }) {
-      const now = moment().toDate();
-
-      const historyData = {
-        dateTime: now,
-        item: board,
-        itemType: 'board',
-      };
-
       const ticket = await Ticket.findById(id);
 
       pubsub.publish(topics.TICKET_REMOVED, {
@@ -70,13 +49,10 @@ module.exports = {
         user,
       });
 
-      const historyRecord = await HistoryRecord.create(historyData);
-
       const movedTicket = await Ticket.findOneAndUpdate(
         { _id: id },
         {
           $set: { board },
-          $push: { history: historyRecord._id },
         },
         { new: true },
       );
