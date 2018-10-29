@@ -10,7 +10,12 @@ const dev = env !== 'production';
 const test = env === 'test';
 
 if (!test) {
-  mongoose.connect(mongo);
+  mongoose.connect(
+    mongo,
+    {
+      useNewUrlParser: true,
+    },
+  );
   mongoose.set('debug', true);
 }
 
