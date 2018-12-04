@@ -14,8 +14,8 @@ const params = {
 };
 
 const strategy = new Strategy(params, (payload, done) => {
-  const { _id } = payload;
-  UserModel.findById(_id, (err, res) => {
+  const { id } = payload;
+  UserModel.findById(id, (err, res) => {
     if (err) return done(err, null);
     if (res) return done(null, res);
     return done(new Error('User Not Found'), null);
@@ -38,8 +38,8 @@ module.exports = {
         throw new Error('Invalid token');
       }
 
-      const { _id } = payload;
-      const user = await UserModel.findById(_id);
+      const { id } = payload;
+      const user = await UserModel.findById(id);
 
       if (!user) {
         throw new Error('Invalid token');
@@ -61,7 +61,11 @@ module.exports = {
       throw new Error('Invalid credentials');
     }
 
-    const payload = user;
+    const payload = {
+      id: user._id,
+      email: user.email,
+    };
+
     return jwt.encode(payload, secret);
   },
 };
