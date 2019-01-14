@@ -30,6 +30,7 @@
     "morgan": "^1.9.0",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
+    "simple-graphql-assembler": "^0.0.2",
     "subscriptions-transport-ws": "^0.9.5"
   },
   "devDependencies": {

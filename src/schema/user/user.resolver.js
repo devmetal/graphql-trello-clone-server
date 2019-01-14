@@ -4,6 +4,7 @@ const { createToken } = require('../../auth');
 const User = mongoose.model('User');
 
 module.exports = {
+  __name: 'User',
   Query: {
     currentUser(parent, args, ctx) {
       if (!ctx.user) return null;

@@ -7,6 +7,7 @@ const topics = require('../subscription/topics');
 const Ticket = mongoose.model('Ticket');
 
 module.exports = {
+  __name: 'Ticket',
   board(parent) {
     return parent.getBoard();
   },

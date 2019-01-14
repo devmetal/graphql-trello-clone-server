@@ -9,6 +9,7 @@ const withUserIdFilter = iterator =>
   );
 
 module.exports = {
+  __name: 'Subscription',
   ticketAdded: {
     subscribe: withUserIdFilter(() =>
       pubSub.asyncIterator(topics.TICKET_ADDED),

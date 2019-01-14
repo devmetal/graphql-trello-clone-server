@@ -4,6 +4,7 @@ const Ticket = mongoose.model('Ticket');
 const Comment = mongoose.model('Comment');
 
 module.exports = {
+  __name: 'Comment',
   ticket(parent) {
     return parent.getTicket();
   },
