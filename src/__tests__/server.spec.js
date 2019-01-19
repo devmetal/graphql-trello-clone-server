@@ -57,14 +57,6 @@ afterAll(done => {
   server.close(done);
 });
 
-test('server is running and ready for tests', done => {
-  http.get(`http://localhost:${testPort}/health`, res => {
-    const { statusCode } = res;
-    expect(statusCode).toEqual(200);
-    done();
-  });
-});
-
 describe('graphql server', () => {
   let token;
   let queryWithToken;
@@ -80,6 +72,14 @@ describe('graphql server', () => {
     token = data.createUser;
 
     queryWithToken = gqlRequest(token);
+  });
+
+  test('server is running and ready for tests', done => {
+    http.get(`http://localhost:${testPort}/health`, res => {
+      const { statusCode } = res;
+      expect(statusCode).toEqual(200);
+      done();
+    });
   });
 
   test('login', async () => {
