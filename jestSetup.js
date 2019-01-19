@@ -65,7 +65,7 @@ const connectMongoDb = async () => {
   );
 };
 
-const disconnectMongoDb = () => mongoose.disconnect();
+const disconnectMongoDb = async () => mongoose.disconnect();
 const mongoDbDisconnected = () => mongoose.connection.readyState === 0;
 
 beforeEach(async done => {
@@ -76,6 +76,7 @@ beforeEach(async done => {
   done();
 });
 
-afterEach(() => {
-  disconnectMongoDb();
+afterEach(async done => {
+  await disconnectMongoDb();
+  done();
 });
